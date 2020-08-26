@@ -6,6 +6,7 @@ from collections import Counter, OrderedDict
 import datetime as dt
 import io
 import requests
+import mplcursors
 
 url = 'http://www.bccdc.ca/Health-Info-Site/Documents/BCCDC_COVID19_Dashboard_Case_Details.csv'
 s = requests.get(url).content
@@ -23,11 +24,17 @@ num_cases = list(ordered.values())
 
 x_values = [dt.datetime.strptime(d, '%m/%d/%Y').date() for d in dates]
 
+fig, ax = plt.subplots()
 plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m/%d/%Y'))
 plt.gca().xaxis.set_major_locator(mdates.DayLocator(interval=30))
-plt.bar(x_values ,num_cases)
+bars = ax.bar(x_values ,num_cases)
 plt.ylabel("Number of Cases per Day")
 plt.title("Covid-19 cases in BC over time")
 plt.grid(True, axis='y', linewidth=0.5)
 plt.gcf().autofmt_xdate()
+
+# Add hovering
+cursor = mplcursors.cursor(hover=True)
+mplcursors.cursor(bars)
+
 plt.show()
