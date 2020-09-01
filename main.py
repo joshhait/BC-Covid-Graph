@@ -8,6 +8,7 @@ import io
 import requests
 import mplcursors
 
+# get the csv data from the BC CDC website
 url = 'http://www.bccdc.ca/Health-Info-Site/Documents/BCCDC_COVID19_Dashboard_Case_Details.csv'
 s = requests.get(url).content
 df = pd.read_csv(io.StringIO(s.decode('utf-8')))
@@ -22,7 +23,7 @@ dates = list(ordered.keys())
 
 num_cases = list(ordered.values())
 
-x_values = [dt.datetime.strptime(d, '%m/%d/%Y').date() for d in dates]
+x_values = [dt.datetime.strptime(d, '%Y-%m-%d').date() for d in dates]
 
 fig, ax = plt.subplots()
 plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%m/%d/%Y'))
